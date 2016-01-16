@@ -143,13 +143,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        //TODO: Replace this with real logic
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        //TODO: Replace this with real logic
+        return true;
     }
 
     /**
