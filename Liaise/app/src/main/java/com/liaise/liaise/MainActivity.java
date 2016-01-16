@@ -1,4 +1,4 @@
-package com.liaise.plannr;
+package com.liaise.liaise;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

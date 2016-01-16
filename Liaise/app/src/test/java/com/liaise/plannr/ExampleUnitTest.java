@@ -1,4 +1,4 @@
-package com.liaise.plannr;
+package com.liaise.liaise;
 
 import org.junit.Test;
 

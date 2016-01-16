@@ -1,4 +1,4 @@
-package com.liaise.plannr;
+package com.liaise.liaise;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
