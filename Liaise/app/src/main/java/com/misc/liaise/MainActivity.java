@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPager pager;
     FragmentAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Schedule","Contact Us"};
-    int Numboftabs =2;
+    CharSequence Titles[]={"Schedule","Personal","Contact Us" };
+    int Numboftabs =3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

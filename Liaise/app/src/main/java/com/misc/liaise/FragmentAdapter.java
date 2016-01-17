@@ -30,10 +30,15 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
             MainActivity_schedulefragment jesus = new MainActivity_schedulefragment();
             return jesus;
         }
-        else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
+        else if(position == 1)            // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
             MainActivity_contactfragment christ = new MainActivity_contactfragment();
             return christ;
+        }
+        else
+        {
+            MainActivity_personalfragment holy = new MainActivity_personalfragment();
+            return holy;
         }
 
 
