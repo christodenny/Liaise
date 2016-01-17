@@ -3,7 +3,8 @@ package com.misc.liaise;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.app.LoaderManager.LoaderCallbacks;
 
 import android.content.CursorLoader;
@@ -15,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -38,7 +41,7 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -319,22 +322,26 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            String endpoint = "newperson";
+
+            String res = HttpHelper.postStringRequest(endpoint, "name", mEmail, "team_id", "" + (Math.round(Math.random()) + 1));
+            if (res == null) {
+                return false;
+            }
+            int user_id;
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                user_id = Integer.parseInt(res);
+            } catch (NumberFormatException e) {
+                Toast.makeText(null, res + " user id is not an integer!", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            int mode = Activity.MODE_PRIVATE;
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(getString(R.string.login_id), user_id);
+            editor.commit();
 
-            // TODO: register the new account here.
             return true;
         }
 
