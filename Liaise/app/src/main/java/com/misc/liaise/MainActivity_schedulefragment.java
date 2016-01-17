@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -75,12 +76,15 @@ public class MainActivity_schedulefragment extends Fragment {
             for (int i = 0; i < events.size(); i++) {
                 final JSONObject event = events.get(i);
                 String name;
+
                 try {
                     name = event.getString("name");
+
                 } catch (JSONException e) {
                     Log.e("JSON error", event.toString());
                     continue;
                 }
+
                 Log.d("debug", "Making a button");
                 Button button = new Button(view.getContext());
                 button.setId(i + 1);

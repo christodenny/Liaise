@@ -35,6 +35,10 @@ public class EventActivity extends AppCompatActivity {
         eventTitle.setText(getEventName());
         TextView eventDescription = (TextView) findViewById(R.id.textView2);
         eventDescription.setText(getEventDescription());
+        TextView textstart = (TextView) findViewById(R.id.textView3);
+        textstart.setText(getStart());
+        TextView textend = (TextView) findViewById(R.id.textView4);
+        textend.setText(getEnd());
         CheckBox subscribed = (CheckBox) findViewById(R.id.checkBox);
         subscribed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -92,7 +96,22 @@ public class EventActivity extends AppCompatActivity {
             return "";
         }
     }
-
+    public String getStart() {
+        try {
+            return event.getString("start_time");
+        } catch (JSONException e) {
+            Toast.makeText(null, "Can't parse JSON for event name!", Toast.LENGTH_SHORT).show();
+            return "";
+        }
+    }
+    public String getEnd() {
+        try {
+            return event.getString("end_time");
+        } catch (JSONException e) {
+            Toast.makeText(null, "Can't parse JSON for event name!", Toast.LENGTH_SHORT).show();
+            return "";
+        }
+    }
     public String getEventDescription() {
         try {
             return event.getString("description");
