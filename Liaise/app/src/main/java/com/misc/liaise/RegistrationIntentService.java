@@ -16,6 +16,7 @@
 
 package com.misc.liaise;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -59,7 +60,7 @@ public class RegistrationIntentService extends IntentService {
             sendRegistrationToServer(token);
 
             // Subscribe to topic channels
-            subscribeTopics(token);
+            //subscribeTopics(token);
 
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
@@ -87,6 +88,12 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
+        Log.d(TAG, "sending registration to server");
+
+        int mode = Activity.MODE_PRIVATE;
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
+        int id = preferences.getInt(getString(R.string.login_id), -1);
+        HttpHelper.postStringRequest("settoken", "token", token, "id", String.valueOf(id));
     }
 
     /**
