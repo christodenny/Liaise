@@ -98,7 +98,7 @@ public class EventActivity extends AppCompatActivity {
     }
     public String getStart() {
         try {
-            return event.getString("start_time");
+            return event.getString("start_time").substring(12, 16);
         } catch (JSONException e) {
             Toast.makeText(null, "Can't parse JSON for event name!", Toast.LENGTH_SHORT).show();
             return "";
@@ -106,7 +106,7 @@ public class EventActivity extends AppCompatActivity {
     }
     public String getEnd() {
         try {
-            return event.getString("end_time");
+            return event.getString("end_time").substring(12, 16);
         } catch (JSONException e) {
             Toast.makeText(null, "Can't parse JSON for event name!", Toast.LENGTH_SHORT).show();
             return "";
