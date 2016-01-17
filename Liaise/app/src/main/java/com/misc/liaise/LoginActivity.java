@@ -289,6 +289,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         client.disconnect();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int mode = Activity.MODE_PRIVATE;
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
+        if (!preferences.contains(getString(R.string.login_id))) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     public void next(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

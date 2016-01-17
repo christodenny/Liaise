@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -39,28 +40,7 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // add/remove user/event combo
-                String endpoint;
-                if (isChecked) {
-                    endpoint = "newpplevent";
-                } else {
-                    return;
-                }
-                int mode = Activity.MODE_PRIVATE;
-                SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
-                int user_id = preferences.getInt(getString(R.string.login_id), -1);
-                if (user_id == -1) {
-                    // we're not logged in???
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                }
-                int event_id;
-                try {
-                    event_id = event.getInt("id");
-                } catch (JSONException e) {
-                    Toast.makeText(null, "Invalid Event JSON!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                HttpHelper.postStringRequest(endpoint, "ppl_id", Integer.toString(user_id), "event_id", Integer.toString(event_id));
+                new SubscribeCheckboxTask(isChecked).execute((Void) null);
             }
         });
         Button mapsButton = (Button) findViewById(R.id.button);
@@ -74,7 +54,18 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
-    // TODO: DO
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int mode = Activity.MODE_PRIVATE;
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
+        if (!preferences.contains(getString(R.string.login_id))) {
+            Intent intent = new Intent("logout");
+            finish();
+        }
+    }
+
     public String getLongitude() {
         try {
             return Double.toString(event.getDouble("longitude"));
@@ -108,6 +99,43 @@ public class EventActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Toast.makeText(null, "Can't parse JSON for event description!", Toast.LENGTH_SHORT).show();
             return "";
+        }
+    }
+
+    private class SubscribeCheckboxTask extends AsyncTask<Void, Void, Boolean> {
+
+        private boolean isChecked;
+
+        public SubscribeCheckboxTask(boolean checked) {
+            isChecked = checked;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            String endpoint;
+            if (isChecked) {
+                endpoint = "newpplevent";
+            } else {
+                // TODO: update when endpoint is ready
+                return false;
+            }
+            int mode = Activity.MODE_PRIVATE;
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
+            int user_id = preferences.getInt(getString(R.string.login_id), -1);
+            if (user_id == -1) {
+                // we're not logged in???
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+            int event_id;
+            try {
+                event_id = event.getInt("id");
+            } catch (JSONException e) {
+                Toast.makeText(null, "Invalid Event JSON!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            HttpHelper.postStringRequest(endpoint, "ppl_id", Integer.toString(user_id), "event_id", Integer.toString(event_id));
+            return true;
         }
     }
 }

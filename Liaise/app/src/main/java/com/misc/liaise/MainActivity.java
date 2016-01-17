@@ -1,5 +1,8 @@
 package com.misc.liaise;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -76,5 +79,18 @@ public class MainActivity extends AppCompatActivity {
        // }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int mode = Activity.MODE_PRIVATE;
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.login_preference), mode);
+        if (!preferences.contains(getString(R.string.login_id))) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
